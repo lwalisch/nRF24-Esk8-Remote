@@ -2,7 +2,8 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
-#include "RF24.h"
+#include <RF24.h>
+#include <OneButton.h>
 
 // Uncomment DEBUG if you need to debug the remote
 // #define DEBUG
@@ -142,9 +143,9 @@ const char dataSuffix[3][4] = {"KMH", "KM", "%"};
 const char dataPrefix[3][9] = {"SPEED", "DISTANCE", "BATTERY"};
 
 // Pin defination
-const uint8_t triggerPin = 4;
-const uint8_t batteryMeasurePin = A2;
-const uint8_t hallSensorPin = A3;
+const uint8_t triggerPin = 3;
+const uint8_t batteryMeasurePin = A3;
+const uint8_t hallSensorPin = A6;
 const uint8_t CE = 9;
 const uint8_t CS = 10;
 
@@ -193,7 +194,13 @@ unsigned long settingChangeMillis = 0;
 // Instantiating RF24 object for NRF24 communication
 RF24 radio(CE, CS);
 
+// define OneButtonObject to detect trigger doubleclick
+OneButton oneButtonTrigger(triggerPin, true);
+
 void setup() {
+
+  // attach double click callback function to trigger
+  oneButtonTrigger.attachDoubleClick(doubleClickCb);
 
 	#ifdef DEBUG
 		Serial.begin(9600);
@@ -222,6 +229,8 @@ void setup() {
 }
 
 void loop() {
+
+  oneButtonTrigger.tick();
 
 	calculateThrottlePosition();
 
@@ -848,6 +857,16 @@ void drawTitleScreen(String title) {
 }
 
 /*
+ * callback function which is called on trigger doubleclick to change the displayed page 
+ */
+void doubleClickCb() {
+  displayData++;
+  if (displayData > 2) {
+    displayData = 0;
+  }
+}
+
+/*
  * Print the main page: Throttle, battery level and telemetry
  */
 void drawPage() {
@@ -859,6 +878,7 @@ void drawPage() {
 	x = 0;
 	y = 16;
 
+/*
 	// Rotate the realtime data each 4s.
 	if ((millis() - lastDataRotation) >= 4000) {
 
@@ -868,8 +888,10 @@ void drawPage() {
 		if (displayData > 2) {
 			displayData = 0;
 		}
-	}
 
+    
+	}
+*/
 	switch (displayData) {
 		case 0:
 			value = ratioRpmSpeed * returnData.rpm;
