@@ -1,5 +1,14 @@
 # FireFly-Remote v2.0
 
+This is a fork from https://github.com/SolidGeek/nRF24-Esk8-Remote with some adapted features.
+
+Implemented Features:
+* The automatic cycling through the pages is replaced by changing pages by doubleclicking the trigger.
+
+Planned Features:
+* Adding page with live current draw
+* Adding settings option to configure which pages are displayed
+---
 Control your electric skateboard with an Arduino controlled remote. This repository contains the needed software for the remote and the receiver, but you will need to install a few Arduino Libraries in order to compile the Arduino sketches. The Arduino IDE comes with most of the needed libraries, but you will ned to manually install VescUartControl from RollingGecko: https://github.com/RollingGecko/VescUartControl.
 
 You can find the 3D-models for the remote (STL files) on Thingiverse: https://www.thingiverse.com/thing:2454391 and read more about the project on: https://www.electric-skateboard.builders/t/simple-3d-printed-nrf-remote-arduino-controlled/28543
